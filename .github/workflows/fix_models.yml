@@ -1,4 +1,4 @@
-name: Fix Models Format
+name: Fix Models
 
 on: [pull_request]
 
