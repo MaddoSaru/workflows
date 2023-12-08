@@ -21,7 +21,7 @@ with
                 yearofweek(start_of_week), '-W', weekofyear(start_of_week)
             ) as year_week,
             last_day(date_value, week) as end_of_week,
-            concat(
+        concat(
                 extract(year from date_value), '-M', extract(month from date_value)
             ) as year_month,
     concat(
