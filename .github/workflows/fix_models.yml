@@ -26,6 +26,7 @@ jobs:
           git config -l
 
       - name: Git Commit
+        if: steps.filter.outputs.workflows == 'true'
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
@@ -33,4 +34,3 @@ jobs:
           git add models/*
           git commit -m "format(models/*.sql): change queries format"
           git push
-        continue-on-error: true
