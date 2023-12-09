@@ -14,17 +14,18 @@ jobs:
         run: "pip install sqlfluff==2.3.5"
 
       - name: Fix models
-        run: |
-          sqlfluff fix -h
-          sqlfluff fix --force
+        run: "sqlfluff fix --force"
 
-      - name: Set Git Config
+      - name: Git Config & Commit
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
-          git config -l
+          git status
+          git add models/*
+          git commit -m "fix(models/*): change query format"
+          git push
 
       - name: Commit diff
         uses: stefanzweifel/git-auto-commit-action@v4
