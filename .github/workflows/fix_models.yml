@@ -25,8 +25,11 @@ jobs:
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
           git config -l
 
+      - name: Check Uncommited Changes
+        run: echo "UNCOMMITED_CHANGES=$(git diff --cached --numstat | wc -l)" >> $GITHUB_ENV
+
       - name: Git Commit
-        if: steps.filter.outputs.workflows == 'true'
+        if: ${{ env.UNCOMMITED_CHANGES > 0 }}
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
