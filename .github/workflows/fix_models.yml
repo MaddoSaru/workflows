@@ -14,3 +14,11 @@ jobs:
         run: "pip install sqlfluff==0.3.6"
       - name: Lint models
         run: "sqlfluff fix models --force --no-safety"
+      
+      - name: Commit diff
+        run: |
+          git add .
+          git status
+          git commit -m "fix(models/): format files"
+          git status
+          git push -u origin origin/${{ github.head_ref }}
