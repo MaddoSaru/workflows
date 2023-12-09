@@ -16,7 +16,7 @@ jobs:
       - name: Fix models
         run: "sqlfluff fix models --force --no-safety"
       
-      - name: set git config
+      - name: Set Git Config
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -30,4 +30,4 @@ jobs:
           git status
           git commit -m "fix(models/): format files"
           git status
-          git push origin ${{ github.head_ref }}
+          git push --set-upstream origin ${{ github.head_ref }}
