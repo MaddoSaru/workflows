@@ -32,9 +32,11 @@ WITH
                 EXTRACT(QUARTER FROM date_value)
             ) AS year_quarter,
             EXTRACT(QUARTER FROM date_value) AS quarter,
-            COALESCE ((EXTRACT(DAYOFWEEK FROM date_value) + 1) IN (1, 7),
-            FALSE) AS is_weekend,
-            CASE WHEN is_weekend = true THEN 0 ELSE 1 END AS business_day,
+            COALESCE(
+                (EXTRACT(DAYOFWEEK FROM date_value) + 1) IN (1, 7),
+                FALSE
+            ) AS is_weekend,
+            CASE WHEN is_weekend = TRUE THEN 0 ELSE 1 END AS business_day,
             SUM(business_day) OVER (
                 ORDER BY
                     date_value
