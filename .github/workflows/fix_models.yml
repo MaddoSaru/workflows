@@ -16,6 +16,14 @@ jobs:
       - name: Fix models
         run: "sqlfluff fix ./ --force --no-safety"
 
+      - name: Set Git Config
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          git config -l
+
       - uses: EndBug/add-and-commit@v9
         name: Commit Changes
         with:
