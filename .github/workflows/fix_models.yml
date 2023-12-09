@@ -25,7 +25,13 @@ jobs:
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
           git config -l
 
+      - name: Check Uncommited Changes
+        run: |
+          echo "UNCOMMITED_CHANGES=$(git status --porcelain -suno | wc -l)" >> $GITHUB_ENV
+          echo ${{ env.UNCOMMITED_CHANGES }}
+
       - name: Git Commit
+        if: ${{ env.UNCOMMITED_CHANGES > 0 }}
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
@@ -33,4 +39,3 @@ jobs:
           git add models/*
           git commit -m "format(models/*.sql): change queries format"
           git push
-        continue-on-error: true
