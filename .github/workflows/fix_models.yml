@@ -24,7 +24,5 @@ jobs:
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
           git config -l
 
-      - uses: EndBug/add-and-commit@v9
-        name: Commit Changes
-        with:
-          push: true
+      - name: Commit diff
+        uses: stefanzweifel/git-auto-commit-action@v4
