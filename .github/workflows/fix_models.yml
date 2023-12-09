@@ -26,7 +26,7 @@ jobs:
           git config -l
 
       - name: Check Changes & Commit
-        if: ${{ "git status --porcelain" }}
+        if: steps.filter.outputs.workflows == 'true'
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
