@@ -14,7 +14,7 @@ jobs:
         run: "pip install sqlfluff==0.3.6"
 
       - name: Fix models
-        run: "sqlfluff fix models --force --no-safety"
+        run: "sqlfluff fix ./ --force --no-safety"
 
       - uses: EndBug/add-and-commit@v9
         name: Commit Changes
