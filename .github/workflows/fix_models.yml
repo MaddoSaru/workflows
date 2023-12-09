@@ -30,4 +30,4 @@ jobs:
           git status
           git commit -m "fix(models/): format files"
           git status
-          git push -u origin origin/${{ github.head_ref }}
+          git push origin ${{ github.head_ref }}
