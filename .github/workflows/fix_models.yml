@@ -6,8 +6,8 @@ jobs:
   lint-models:
     runs-on: ubuntu-latest
     steps:
-      - uses: "actions/checkout@v2"
-      - uses: "actions/setup-python@v2"
+      - uses: "actions/checkout@v3"
+      - uses: "actions/setup-python@v3"
         with:
             python-version: "3.8"
       - name: Install SQLFluff
@@ -25,9 +25,4 @@ jobs:
           git config -l
 
       - name: Commit diff
-        run: |
-          git add models/*
-          git status
-          git commit -m "fix(models/): format files"
-          git status
-          git push --set-upstream origin ${{ github.head_ref }}
+        uses: stefanzweifel/git-auto-commit-action@v4
