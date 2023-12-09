@@ -16,7 +16,7 @@ jobs:
       - name: Fix models
         run: |
           sqlfluff fix -h
-          sqlfluff fix --force --no-safety
+          sqlfluff fix --force
 
       - name: Set Git Config
         env:
