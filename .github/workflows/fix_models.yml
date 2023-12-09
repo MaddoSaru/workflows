@@ -22,6 +22,7 @@ jobs:
         run: |
           git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          git checkout ${GITHUB_REF}
           git status
           git add models/*
           git commit -m "fix(models/*): change query format"
