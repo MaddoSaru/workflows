@@ -28,7 +28,6 @@ jobs:
       - name: Check Uncommited Changes
         run: |
           echo "UNCOMMITED_CHANGES=$(git status --porcelain -suno | wc -l)" >> $GITHUB_ENV
-          echo ${{ env.UNCOMMITED_CHANGES }}
 
       - name: Git Commit
         if: ${{ env.UNCOMMITED_CHANGES > 0 }}
