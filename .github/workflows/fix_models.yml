@@ -13,6 +13,9 @@ jobs:
       - name: Install SQLFluff
         run: "pip install sqlfluff==0.3.6"
 
+      - name: Check CDir
+        run: "pwd"
+
       - name: Fix models
         run: "sqlfluff fix ./ --force --no-safety"
 
