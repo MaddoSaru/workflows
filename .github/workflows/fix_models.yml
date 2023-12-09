@@ -32,6 +32,3 @@ jobs:
           git add models/*
           git commit -m "format(models/*.sql): change queries format"
           git push
-
-      #- name: Commit diff
-      #  uses: stefanzweifel/git-auto-commit-action@v4
