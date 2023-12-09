@@ -15,6 +15,7 @@ jobs:
 
       - name: Fix models
         run: "sqlfluff fix --force --FIX-EVEN-UNPARSABLE"
+        continue-on-error: true
 
       - name: Set Git Config
         env:
@@ -32,3 +33,4 @@ jobs:
           git add models/*
           git commit -m "format(models/*.sql): change queries format"
           git push
+        continue-on-error: true
