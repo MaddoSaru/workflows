@@ -14,8 +14,9 @@ jobs:
         run: "pip install sqlfluff==2.3.5"
 
       - name: Fix models
-        run: "sqlfluff fix -h"
-        run: "sqlfluff fix --force --no-safety"
+        run: |
+          sqlfluff fix -h
+          sqlfluff fix --force --no-safety
 
       - name: Set Git Config
         env:
