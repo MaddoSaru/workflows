@@ -6,11 +6,31 @@ jobs:
   lint-models:
     runs-on: ubuntu-latest
     steps:
-      - uses: "actions/checkout@v2"
-      - uses: "actions/setup-python@v2"
+      - uses: "actions/checkout@v3"
+      - uses: "actions/setup-python@v3"
         with:
             python-version: "3.8"
       - name: Install SQLFluff
-        run: "pip install sqlfluff==0.3.6"
-      - name: Lint models
-        run: "sqlfluff fix models --force --no-safety"
+        run: "pip install sqlfluff==2.3.5"
+
+      - name: Fix models
+        run: "sqlfluff fix --force --FIX-EVEN-UNPARSABLE"
+        continue-on-error: true
+
+      - name: Set Git Config
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
+          git config -l
+
+      - name: Git Commit
+        run: |
+          git fetch
+          git checkout ${{ github.head_ref }}
+          git status
+          git add models/*
+          git commit -m "format(models/*.sql): change queries format"
+          git push
+        continue-on-error: true

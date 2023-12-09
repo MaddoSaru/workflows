@@ -1,47 +1,51 @@
 {{ config(materialized="table") }}
 
-with
-    date_dimensions_final as (
-        select
-            row_number() over (order by date_value) as date_id,
-            to_date(date_value) as date_value,
-            extract(year from date_value) as year,
-            extract(month from date_value) as month,
-            monthname(date_value) as month_name,
-            case
-                when extract(dayofweek from date_value) = 0
-                then 7
-                else extract(dayofweek from date_value)
-            end as day_of_week,
-            extract(day from date_value) as month_day,
-            dayname(date_value) as day_name,
-            extract(weekofyear from date_value) as week_of_year,
-            date_trunc(week, to_date(date_value)) as start_of_week,
-            concat(
-                yearofweek(start_of_week), '-W', weekofyear(start_of_week)
-            ) as year_week,
-            last_day(date_value, week) as end_of_week,
-    concat(
-                extract(year from date_value), '-M', extract(month from date_value)
-            ) as year_month,
-    concat(
-                extract(year from date_value), '-Q', extract(quarter from date_value)
-            ) as year_quarter,
-            extract(quarter from date_value) as quarter,
-            case
-                when (extract(dayofweek from date_value) + 1) in (1, 7)
-            then true
-                else false
-            end as is_weekend,
-            case when is_weekend = true then 0 else 1 end as business_day,
-                        sum(business_day) over (
-            order by date_value rows between unbounded preceding and current row
-            ) business_day_running_count
-        from
+WITH
+    date_dimensions_final AS (
+        SELECT
+            ROW_NUMBER() OVER (ORDER BY date_value) AS date_id,
+            TO_DATE(date_value) AS date_value,
+            EXTRACT(YEAR FROM date_value) AS year,
+            EXTRACT(MONTH FROM date_value) AS month,
+            MONTHNAME(date_value) AS month_name,
+            CASE
+                WHEN EXTRACT(DAYOFWEEK FROM date_value) = 0
+                    THEN 7
+                ELSE EXTRACT(DAYOFWEEK FROM date_value)
+            END AS day_of_week,
+            EXTRACT(DAY FROM date_value) AS month_day,
+            DAYNAME(date_value) AS day_name,
+            EXTRACT(WEEKOFYEAR FROM date_value) AS week_of_year,
+            DATE_TRUNC(WEEK, TO_DATE(date_value)) AS start_of_week,
+            CONCAT(
+                YEAROFWEEK(start_of_week), '-W', WEEKOFYEAR(start_of_week)
+            ) AS year_week,
+            LAST_DAY(date_value, WEEK) AS end_of_week,
+            CONCAT(
+                EXTRACT(YEAR FROM date_value),
+                '-M',
+                EXTRACT(MONTH FROM date_value)
+            ) AS year_month,
+            CONCAT(
+                EXTRACT(YEAR FROM date_value),
+                '-Q',
+                EXTRACT(QUARTER FROM date_value)
+            ) AS year_quarter,
+            EXTRACT(QUARTER FROM date_value) AS quarter,
+            COALESCE ((EXTRACT(DAYOFWEEK FROM date_value) + 1) IN (1, 7),
+            FALSE) AS is_weekend,
+            CASE WHEN is_weekend = true THEN 0 ELSE 1 END AS business_day,
+            SUM(business_day) OVER (
+                ORDER BY
+                    date_value
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+            ) AS business_day_running_count
+        FROM
             (
-    select dateadd(day, seq4(), '2015-01-01') as date_value
-from table(generator(rowcount => 9497))
-            ))
+                SELECT DATEADD(DAY, SEQ4(), '2015-01-01') AS date_value
+                FROM TABLE(GENERATOR(rowcount => 9497))
+            )
+    )
 
-select *
-from date_dimensions_final
+SELECT *
+FROM date_dimensions_final

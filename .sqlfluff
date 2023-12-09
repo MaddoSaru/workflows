@@ -2,9 +2,6 @@
 dialect = snowflake
 templater = jinja
 
-[sqlfluff:templater:dbt]
-project_dir = ./
-
 [tool.sqlfluff.templater.jinja]
 apply_dbt_builtins = True
 
