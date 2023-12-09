@@ -14,7 +14,7 @@ jobs:
         run: "pip install sqlfluff==2.3.5"
 
       - name: Fix models
-        run: "sqlfluff fix --force --ignore parsing --FIX-EVEN-UNPARSABLE"
+        run: "sqlfluff fix --force --ignore parsing,linting"
 
       - name: Set Git Config
         env:
