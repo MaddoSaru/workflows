@@ -25,7 +25,8 @@ jobs:
           git config --global user.name "$(gh api /users/${GITHUB_ACTOR} | jq .name -r)"
           git config -l
 
-      - name: Git Commit
+      - name: Check Changes & Commit
+        if: "git status --porcelain"
         run: |
           git fetch
           git checkout ${{ github.head_ref }}
@@ -33,4 +34,3 @@ jobs:
           git add models/*
           git commit -m "format(models/*.sql): change queries format"
           git push
-        continue-on-error: true
